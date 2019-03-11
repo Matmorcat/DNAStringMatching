@@ -62,12 +62,29 @@ print('3. ' + str(z.index(len(pattern)) - (len(pattern) + 1)))
 
 """
 For KMP, output the following:
+"""
 
+# TODO: Calculate prefix table
+
+"""
 1. The prefix table
+"""
 
+# TODO: 1. The prefix table
+
+"""
 2. Whether or not this pattern is present in the text (Yes/No)
+"""
 
-3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index counting starts at 0.
+# TODO: 2. Whether or not this pattern is present in the text (Yes/No)
 
+"""
+3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
+counting starts at 0.
+"""
+
+# TODO: 3. The beginning index within the text at which the pattern matches (If the pattern is present).
+
+"""
 4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
 """
