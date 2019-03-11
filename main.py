@@ -1,4 +1,4 @@
-def z_algorithm(pattern: str, text: str) -> list:
+def z_array(pattern: str, text: str) -> list:
     full_text = pattern + "$" + text
 
     z = ['X']
@@ -22,69 +22,80 @@ def z_algorithm(pattern: str, text: str) -> list:
 
 
 """
-Determine if the following pattern occurs in the following text:
+def kmp_prefix(pattern: str) -> list:
 
-"""
-pattern = 'ACACAGT'
+    # The last element of the suffix to check
+    i = 1
 
-text = 'ACAT ACGACACAGT'
-
-"""
-Use the Z algorithm and KMP for this assignment.
-
-For the Z algorithm, output the following:
+    pattern[:i + 1]
 """
 
-z = z_algorithm(pattern=pattern, text=text)
 
-"""
-1. Z array of the string P$T
-"""
+class Main:
+    """
+    Determine if the following pattern occurs in the following text:
 
-print('1. ' + str(z))
+    """
+    pattern = 'ACACAGT'
 
-"""
-2. Whether or not this pattern is present in the text (Yes/No)
-"""
+    text = 'ACAT ACGACACAGT'
 
-if len(pattern) in z:
-    print('2. Yes')
-else:
-    print('2. No')
+    """
+    Use the Z algorithm and KMP for this assignment.
+    
+    For the Z algorithm, output the following:
+    """
 
-"""
-3. The beginning index within the text at which the pattern matches (If the pattern is present). This is not the 
-beginning index of the concatenated P$T string. This is the beginning index within T. Assume that index counting starts 
-at 0.
-"""
+    z = z_array(pattern=pattern, text=text)
 
-print('3. ' + str(z.index(len(pattern)) - (len(pattern) + 1)))
+    """
+    1. Z array of the string P$T
+    """
 
-"""
-For KMP, output the following:
-"""
+    print('1. ' + str(z))
 
-# TODO: Calculate prefix table
+    """
+    2. Whether or not this pattern is present in the text (Yes/No)
+    """
 
-"""
-1. The prefix table
-"""
+    if len(pattern) in z:
+        print('2. Yes')
+    else:
+        print('2. No')
 
-# TODO: 1. The prefix table
+    """
+    3. The beginning index within the text at which the pattern matches (If the pattern is present). This is not the 
+    beginning index of the concatenated P$T string. This is the beginning index within T. Assume that index counting starts 
+    at 0.
+    """
 
-"""
-2. Whether or not this pattern is present in the text (Yes/No)
-"""
+    print('3. ' + str(z.index(len(pattern)) - (len(pattern) + 1)))
 
-# TODO: 2. Whether or not this pattern is present in the text (Yes/No)
+    """
+    For KMP, output the following:
+    """
 
-"""
-3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
-counting starts at 0.
-"""
+    # TODO: Calculate prefix table
 
-# TODO: 3. The beginning index within the text at which the pattern matches (If the pattern is present).
+    """
+    1. The prefix table
+    """
 
-"""
-4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
-"""
+    # TODO: 1. The prefix table
+
+    """
+    2. Whether or not this pattern is present in the text (Yes/No)
+    """
+
+    # TODO: 2. Whether or not this pattern is present in the text (Yes/No)
+
+    """
+    3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
+    counting starts at 0.
+    """
+
+    # TODO: 3. The beginning index within the text at which the pattern matches (If the pattern is present).
+
+    """
+    4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
+    """
