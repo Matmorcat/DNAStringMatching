@@ -1,5 +1,6 @@
 # Label for value that represents no matches found
 SIGNAL_NO = -1
+VISUAL_OUTPUT_INDENT = 3
 
 
 def z_array(pattern: str, text: str) -> list:
@@ -55,13 +56,24 @@ def kmp_prefix(pattern: str) -> list:
     return p
 
 
-def kmp_search(pattern: str, text: str, prefixes: list) -> int:
+def kmp_search(pattern: str, text: str, prefixes: list, visualize=False) -> int:
+
+    # Calculate indentation from global setting
+    indent = ' ' * VISUAL_OUTPUT_INDENT
 
     # The index of the start of the substring being compared in the text
     i = -1
 
+    if visualize:
+        skip_count = 0
+
     while i < len(text) - len(pattern):
         i += 1
+
+        if visualize:
+            print(indent + text)
+
+            print(indent + ' ' * i + pattern)
 
         # The offset from i / location of the char in the prefix list
         j = -1
@@ -74,14 +86,25 @@ def kmp_search(pattern: str, text: str, prefixes: list) -> int:
 
             # If there is a mismatch
             if text[i + j:i + j + 1] != pattern[j:j + 1]:
+
+                # Take note of the location of the mismatch
                 mismatch = j
 
-        # The text matched the pattern
+                if visualize:
+                    skip_count += prefixes[mismatch]
+                    print(indent + 'Mismatch at index ' + str(mismatch) + ' of pattern, skipping ' + str(prefixes[mismatch]) + ' locations')
+
+        # If the text matched the pattern
         if mismatch == SIGNAL_NO:
+
+            if visualize:
+                print(indent + 'Pattern found starting at index ' + str(i) + ' in the text!\n')
+                print(indent + 'Skipped ' + str(skip_count) + ' locations total.')
 
             # Return the location of the start of the match in the text
             return i
 
+        # Skip the number of positions according to the prefix table
         i += prefixes[mismatch]
 
 
@@ -144,19 +167,21 @@ class Main:
     """
 
     kmp_match_index = kmp_search(pattern=pattern, text=text, prefixes=p)
-    if kmp_match_index != SIGNAL_NO:
-        print('2. Yes')
-    else:
+    if kmp_match_index == SIGNAL_NO:
         print('2. No')
+    else:
+        print('2. Yes')
 
-    """
-    3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
-    counting starts at 0.
-    """
+        """
+        3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
+        counting starts at 0.
+        """
 
-    if kmp_match_index != SIGNAL_NO:
         print('3. ' + str(kmp_match_index))
 
     """
     4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
     """
+
+    print('4. Visualization of search...\n')
+    kmp_search(pattern=pattern, text=text, prefixes=p, visualize=True)
