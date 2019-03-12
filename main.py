@@ -103,6 +103,7 @@ class Main:
     1. The prefix table
     """
 
+    print('\nKMP Algorithm:\n')
     print('1. ' + str(p))
 
     """
