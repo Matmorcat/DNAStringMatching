@@ -66,6 +66,7 @@ class Main:
     For the Z algorithm, output the following:
     """
 
+    print('\nZ Algorithm:\n')
     z = z_array(pattern=pattern, text=text)
 
     """
@@ -101,6 +102,7 @@ class Main:
     1. The prefix table
     """
 
+    print('\nKMP Algorithm:\n')
     print('1. ' + str(p))
 
     """
