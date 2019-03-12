@@ -66,6 +66,7 @@ class Main:
     For the Z algorithm, output the following:
     """
 
+    print('\nZ Algorithm:\n')
     z = z_array(pattern=pattern, text=text)
 
     """
@@ -95,6 +96,7 @@ class Main:
     For KMP, output the following:
     """
 
+    print('\nKMP Algorithm:\n')
     p = kmp_prefix(pattern=pattern)
 
     """
