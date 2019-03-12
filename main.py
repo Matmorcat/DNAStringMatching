@@ -21,14 +21,34 @@ def z_array(pattern: str, text: str) -> list:
     return z
 
 
-"""
 def kmp_prefix(pattern: str) -> list:
 
-    # The last element of the suffix to check
-    i = 1
+    p = [0]
 
-    pattern[:i + 1]
-"""
+    # The last element of the suffix to check
+    i = 0
+
+    while i < len(pattern) - 1:
+        i += 1
+
+        pattern_slice = pattern[:i + 1]
+
+        # The length of the suffix / prefix to compare
+        j = 0
+
+        # The length of the longest suffix and prefix in common for the substring (result of while loop on j)
+        longest_common = 0
+
+        # Continue until the last possible prefix and suffix
+        while j < i - 1:
+            j += 1
+
+            if pattern_slice[:j] == pattern_slice[-1 * j:]:
+                longest_common = j
+
+        p.append(longest_common)
+
+    return p
 
 
 class Main:
@@ -75,13 +95,13 @@ class Main:
     For KMP, output the following:
     """
 
-    # TODO: Calculate prefix table
+    p = kmp_prefix(pattern=pattern)
 
     """
     1. The prefix table
     """
 
-    # TODO: 1. The prefix table
+    print('1. ' + str(p))
 
     """
     2. Whether or not this pattern is present in the text (Yes/No)
