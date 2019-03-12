@@ -1,3 +1,7 @@
+# Label for value that represents no matches found
+SIGNAL_NO = -1
+
+
 def z_array(pattern: str, text: str) -> list:
     full_text = pattern + "$" + text
 
@@ -49,6 +53,36 @@ def kmp_prefix(pattern: str) -> list:
         p.append(longest_common)
 
     return p
+
+
+def kmp_search(pattern: str, text: str, prefixes: list) -> int:
+
+    # The index of the start of the substring being compared in the text
+    i = -1
+
+    while i < len(text) - len(pattern):
+        i += 1
+
+        # The offset from i / location of the char in the prefix list
+        j = -1
+
+        # The location of the mismatch in the pattern and substring (SIGNAL_NO is no mismatch found yet)
+        mismatch = SIGNAL_NO
+
+        while mismatch == SIGNAL_NO and j < len(pattern) and i + j < len(text) - len(pattern):
+            j += 1
+
+            # If there is a mismatch
+            if text[i + j:i + j + 1] != pattern[j:j + 1]:
+                mismatch = j
+
+        # The text matched the pattern
+        if mismatch == SIGNAL_NO:
+
+            # Return the location of the start of the match in the text
+            return i
+
+        i += prefixes[mismatch]
 
 
 class Main:
@@ -109,14 +143,19 @@ class Main:
     2. Whether or not this pattern is present in the text (Yes/No)
     """
 
-    # TODO: 2. Whether or not this pattern is present in the text (Yes/No)
+    kmp_match_index = kmp_search(pattern=pattern, text=text, prefixes=p)
+    if kmp_match_index != SIGNAL_NO:
+        print('2. Yes')
+    else:
+        print('2. No')
 
     """
     3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
     counting starts at 0.
     """
 
-    # TODO: 3. The beginning index within the text at which the pattern matches (If the pattern is present).
+    if kmp_match_index != SIGNAL_NO:
+        print('3. ' + str(kmp_match_index))
 
     """
     4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
