@@ -1,6 +1,30 @@
 # Label for value that represents no matches found
-SIGNAL_NO = -1
-VISUAL_OUTPUT_INDENT = 3
+SIGNAL_NO: int = -1
+VISUAL_OUTPUT_INDENT: int = 3
+
+TEST_CASES: dict = {
+    'A': {
+        'pattern': 'ACACAGT',
+        'text': 'ACAT ACGACACAGT'
+    },
+    'B': {
+        'pattern': 'ABABAAAABBBBAABABABAAAA',
+        'text': 'AABABABABABBBBBBAAABBABAAABBBAABBABAAABABBABABAAAABBBBAABABABAAAABBAABABBABABAB'
+    },
+    'Matt': {
+        'pattern': 'Matt',
+        'text': 'Hello, my name is Matt, and this is a test case.'
+    },
+    'Rat': {
+        'pattern': 'rat and the cat, Matt, rat and the cat',
+        'text': 'There was a rat and the cat, Matt, rat and the rat and the cat, Matt did not like the hat. rat and '
+                'the cat, Matt, rat and the cat.'
+    }
+}
+
+# The pattern / text combo(s) to test, accepts multiple cases
+USE_TEST_CASES_INDEX: set = {'A'}
+# USE_TEST_CASES_INDEX: set = TEST_CASES.keys()
 
 
 def z_array(pattern: str, text: str) -> list:
@@ -56,7 +80,14 @@ def kmp_prefix(pattern: str) -> list:
     return p
 
 
-def kmp_search(pattern: str, text: str, prefixes: list, visualize=False) -> int:
+def kmp_search(pattern: str, text: str, prefixes: list = list(), visualize=False) -> int:
+
+    # If no prefix table is specified, build one automatically
+    if len(prefixes) == 0:
+        prefixes = kmp_prefix(pattern=pattern)
+
+    if len(prefixes) != len(pattern):
+        raise ValueError('The length of the pattern does not match the length of the prefix table!')
 
     # Calculate indentation from global setting
     indent = ' ' * VISUAL_OUTPUT_INDENT
@@ -81,7 +112,7 @@ def kmp_search(pattern: str, text: str, prefixes: list, visualize=False) -> int:
         # The location of the mismatch in the pattern and substring (SIGNAL_NO is no mismatch found yet)
         mismatch = SIGNAL_NO
 
-        while mismatch == SIGNAL_NO and j < len(pattern) and i + j < len(text) - len(pattern):
+        while mismatch == SIGNAL_NO and j < len(pattern) - 1 and i + j < len(text) - len(pattern):
             j += 1
 
             # If there is a mismatch
@@ -107,81 +138,80 @@ def kmp_search(pattern: str, text: str, prefixes: list, visualize=False) -> int:
         # Skip the number of positions according to the prefix table
         i += prefixes[mismatch]
 
+    if visualize:
+        print(indent + 'Pattern not found in the text!')
+
 
 class Main:
-    """
-    Determine if the following pattern occurs in the following text:
 
-    """
-    pattern = 'ACACAGT'
+    for case in USE_TEST_CASES_INDEX:
 
-    text = 'ACAT ACGACACAGT'
+        pattern = TEST_CASES[case]['pattern']
+        text = TEST_CASES[case]['text']
 
-    """
-    Use the Z algorithm and KMP for this assignment.
-    
-    For the Z algorithm, output the following:
-    """
+        print('\nGiven:')
+        print('   Pattern: ' + pattern)
+        print('   Text: ' + text)
 
-    print('\nZ Algorithm:\n')
-
-    """
-    1. Z array of the string P$T
-    """
-
-    z = z_array(pattern=pattern, text=text)
-    print('1. ' + str(z))
-
-    """
-    2. Whether or not this pattern is present in the text (Yes/No)
-    """
-
-    if len(pattern) in z:
-        print('2. Yes')
-    else:
-        print('2. No')
-
-    """
-    3. The beginning index within the text at which the pattern matches (If the pattern is present). This is not the 
-    beginning index of the concatenated P$T string. This is the beginning index within T. Assume that index counting starts 
-    at 0.
-    """
-
-    print('3. ' + str(z.index(len(pattern)) - (len(pattern) + 1)))
-
-    """
-    For KMP, output the following:
-    """
-
-    print('\nKMP Algorithm:\n')
-
-    """
-    1. The prefix table
-    """
-
-    p = kmp_prefix(pattern=pattern)
-    print('1. ' + str(p))
-
-    """
-    2. Whether or not this pattern is present in the text (Yes/No)
-    """
-
-    kmp_match_index = kmp_search(pattern=pattern, text=text, prefixes=p)
-    if kmp_match_index == SIGNAL_NO:
-        print('2. No')
-    else:
-        print('2. Yes')
+        print('\nZ Algorithm:\n')
 
         """
-        3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
-        counting starts at 0.
+        1. Z array of the string P$T
         """
 
-        print('3. ' + str(kmp_match_index))
+        z = z_array(pattern=pattern, text=text)
+        print('1. Z-Array = ' + str(z))
 
-    """
-    4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
-    """
+        """
+        2. Whether or not this pattern is present in the text (Yes/No)
+        """
 
-    print('4. Visualization of search...\n')
-    kmp_search(pattern=pattern, text=text, prefixes=p, visualize=True)
+        if len(pattern) not in z:
+            print('2. Present = No')
+        else:
+            print('2. Present = Yes')
+
+            """
+            3. The beginning index within the text at which the pattern matches (If the pattern is present). This is not the 
+            beginning index of the concatenated P$T string. This is the beginning index within T. Assume that index counting starts 
+            at 0.
+            """
+
+            print('3. Beginning Index = ' + str(z.index(len(pattern)) - (len(pattern) + 1)))
+
+        """
+        For KMP, output the following:
+        """
+
+        print('\nKMP Algorithm:\n')
+
+        """
+        1. The prefix table
+        """
+
+        p = kmp_prefix(pattern=pattern)
+        print('1. Prefix Table = ' + str(p))
+
+        """
+        2. Whether or not this pattern is present in the text (Yes/No)
+        """
+
+        kmp_match_index = kmp_search(pattern=pattern, text=text, prefixes=p)
+        if kmp_match_index == SIGNAL_NO:
+            print('2. Present = No')
+        else:
+            print('2. Present = Yes')
+
+            """
+            3. The beginning index within the text at which the pattern matches (If the pattern is present).  Assume that index 
+            counting starts at 0.
+            """
+
+            print('3. Beginning Index = ' + str(kmp_match_index))
+
+        """
+        4. If you wish, you can output a step by step visual analysis of how the pattern shifts under the text.
+        """
+
+        print('4. Visualization of search...\n')
+        kmp_search(pattern=pattern, text=text, prefixes=p, visualize=True)
