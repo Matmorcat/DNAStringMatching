@@ -67,12 +67,12 @@ class Main:
     """
 
     print('\nZ Algorithm:\n')
-    z = z_array(pattern=pattern, text=text)
 
     """
     1. Z array of the string P$T
     """
 
+    z = z_array(pattern=pattern, text=text)
     print('1. ' + str(z))
 
     """
@@ -97,12 +97,12 @@ class Main:
     """
 
     print('\nKMP Algorithm:\n')
-    p = kmp_prefix(pattern=pattern)
 
     """
     1. The prefix table
     """
 
+    p = kmp_prefix(pattern=pattern)
     print('1. ' + str(p))
 
     """
