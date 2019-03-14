@@ -1,5 +1,13 @@
+"""""""""""""""""""""
+
+Configuration Options
+
+"""""""""""""""""""""
+
 # Label for value that represents no matches found
 SIGNAL_NO: int = -1
+
+# The number of spaces to add to the output of the visualization of KMP searching
 VISUAL_OUTPUT_INDENT: int = 3
 
 TEST_CASES: dict = {
@@ -26,8 +34,22 @@ TEST_CASES: dict = {
 USE_TEST_CASES_INDEX: set = {'A'}
 # USE_TEST_CASES_INDEX: set = TEST_CASES.keys()
 
+"""""""""""""""""""""""
+
+Algorithms Implemented
+
+"""""""""""""""""""""""
+
 
 def z_array(pattern: str, text: str) -> list:
+    """
+    The method that computes a z-array that has the length of the longest prefixes of itself in a concatenated pattern & 
+    string (P$T).
+    
+    :param pattern: The pattern to check in the text
+    :param text: The text to check if the pattern is within
+    :return: The z-array with the count of the largest prefix starting at each index of P$T
+    """
     full_text = pattern + "$" + text
 
     z = ['X']
@@ -38,7 +60,7 @@ def z_array(pattern: str, text: str) -> list:
         # The length of the substring to check
         j = 0
 
-        # While within bounds of the full text
+        # While within bounds of the full text and the substring contains the beginning of P$T
         while j < len(full_text[k:]) and full_text.startswith(full_text[k:k + j + 1]):
 
             # See if a substring matches that is 1 char longer
@@ -51,7 +73,12 @@ def z_array(pattern: str, text: str) -> list:
 
 
 def kmp_prefix(pattern: str) -> list:
+    """
+    Calculates the prefix table for use in the KMP search algorithm.
 
+    :param pattern: The pattern to calculate prefixing on
+    :return: The prefix table (KMP)
+    """
     p = [0]
 
     # The last element of the suffix to check
@@ -81,7 +108,20 @@ def kmp_prefix(pattern: str) -> list:
 
 
 def kmp_search(pattern: str, text: str, prefixes: list = list(), visualize=False) -> int:
+    """
+    The searching algorithm that implements KMP searching technique. This is similar to the naive method, but when a
+    mismatch is found, it checks the prefix table to see how many positions it can skip in the text. This can result
+    in a lower time complexity compared to the naive search method, which can help when searching highly repetitive data
+    for information like that of DNA sequences.
 
+    :param pattern: The pattern to search the text for
+    :param text: The text that is being searched in
+    :param prefixes: The prefix table with the counts of positions that can be skipped for any given mismatch location
+    :param visualize: Whether or not to show the steps the algorithm used and how many locations were skipped. (off by
+    default)
+    :return: Returns SIGNAL_NO (default = -1) if the text doesn't contain the pattern, or the index of the pattern in
+    the text, if the text does contain the pattern
+    """
     # If no prefix table is specified, build one automatically
     if len(prefixes) == 0:
         prefixes = kmp_prefix(pattern=pattern)
@@ -140,6 +180,13 @@ def kmp_search(pattern: str, text: str, prefixes: list = list(), visualize=False
 
     if visualize:
         print(indent + 'Pattern not found in the text!')
+
+
+"""""""""""""""""
+
+Assignment Output
+
+"""""""""""""""""
 
 
 class Main:
